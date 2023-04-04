@@ -13,7 +13,10 @@
 ## Funcionalidades
 
 - Fornecer visualizações dos dados do IBGE que trazem indicadores de inclusão digital no Brasil;
-- Cadastro de alunos;
+- Cadastro de alunos:
+    - perfil;
+    - progresso;
+    - cursos;
 - Cadastro de professores;
 - Cadastro de operadores do sistema;
 - Cadastro de disciplinas;
@@ -21,5 +24,17 @@
 - Cadastro de trilhas;
 - Cadastro de tópicos;
 - Cadastro de instituição;
+- Avaliação de
+    - disciplinas;
+    - cursos;
+    - trilhas;
+    - tópicos;
+    - instituição;
 - Cadastro de turmas;
 - Gerenciamento de acesso;
+- Buscas:
+    - cursos;
+    - tópicos;
+    - disciplinas;
+    - trilhas;
+    - instituição;

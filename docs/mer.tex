@@ -1,0 +1,243 @@
+\documentclass[x11names]{standalone}
+
+\usepackage{tikz}
+\usepackage{tikz-er2}
+\usepackage{pgfplots}
+\usetikzlibrary{shapes,arrows,positioning,decorations.markings}
+\pgfplotsset{compat=1.18}
+\usepackage[normalem]{ulem}
+% \usepackage[a4paper, landscape, margin=1cm]{geometry}
+% \usepackage{environ}
+
+% \tikzset{multi attribute/.style={attribute, double distance=1.5pt}}
+% \tikzset{derived attribute/.style={attribute, dashed}}
+% \tikzset{total/.style={double distance=1.5 pt}}
+% \tikzset{every entity/.style={draw=orange, fill=orange!20}}
+% \tikzset{every attribute/.style={draw=MediumPurple1, fill=MediumPurple1!20}}
+% \tikzset{every relationship/.style={draw=Chartreuse2, fill=Chartreuse2!20}}
+
+% \makeatletter
+% \newsavebox{\measure@tikzpicture}
+% \NewEnviron{scaletikzpicturetowidth}[1]{%
+%     \def\tikz@width{#1}%
+%     \def\tikzscale{1}\begin{lrbox}{\measure@tikzpicture}%
+%     \BODY
+%     \end{lrbox}%
+%     \pgfmathparse{#1/\wd\measure@tikzpicture}%
+%     \edef\tikzscale{\pgfmathresult}%
+%     \BODY
+% }
+% \makeatother
+
+\tikzstyle{derive} = [link, postaction={
+    decorate,
+    decoration={
+        markings,
+        mark=at position 0.5 with { \draw (0,7pt) arc (90:270:7pt); }
+    }
+}]
+
+\tikzstyle{isa} = [circle,
+				   draw, black, very thick, minimum size=3em,
+				   every isa]
+
+\begin{document}
+
+% \begin{tikzpicture}[node distance=7em]
+%     \node[entity] (person) {Person};
+%     \node[attribute] (pid) [left of=person] {\key{ID}} edge (person);
+%     \node[attribute] (name) [above left of=person] {Name} edge (person);
+%     \node[multi attribute] (phone) [above of=person] {Phone} edge (person);
+%     \node[attribute] (address) [above right of=person] {Address} edge (person);
+%     \node[attribute] (street) [above right of=address] {Street} edge (address);
+%     \node[attribute] (city) [right of=address] {City} edge (address);
+%     \node[derived attribute] (age) [right of=person] {Age} edge (person);
+%     \node[relationship] (uses) [below of=person] {Uses} edge (person);
+%     \node[weak entity] (tool) [below of=uses] {Tool} edge [derive] (uses);
+%     \node[attribute] (tid) [left of=tool] {\key{ID}} edge (tool);
+%     \node[attribute] (tname) [right of=tool] {Name} edge (tool);
+% \end{tikzpicture}
+
+
+\begin{tikzpicture}[node distance=7em]
+    \node[draw=none] at (-12, -22) {};
+    \node[draw=none] at (-12, 4) {};
+    \node[draw=none] at (20, -22) {};
+    \node[draw=none] at (20, 4) {};
+    % \foreach \y in {2,1,...,-22} {
+    %     \draw[gray, very thin, dashed] (-10.5,\y) -- (20.5,\y);
+    %     \node at (-11,\y){\y};
+    % }
+    % \foreach \x in {-10,-9,...,20} {
+    %     \draw[gray, very thin, dashed] (\x,2.5) -- (\x,-22.5);
+    %     \node at (\x,3){\x};
+    % }
+
+    \node[entity] (user) {Usuário};
+    \node[isa] (isuser) at (0, -3) {d} edge[total] (user);
+
+    % Atributos do usuário
+    \node[attribute] (cpf) at (6,2) {\key{CPF}} edge (user);
+    \node[attribute] (fullname) at (6,1) {Nome completo} edge (user);
+    \node[attribute] (firstname) at (10,1.5) {Nome} edge (fullname);
+    \node[attribute] (lastname) at (10,0.5) {Sobrenome} edge (fullname);
+    \node[attribute] (email) at (4,0) {E-mail} edge (user);
+    \node[attribute] (password) at (4,-1) {Senha} edge (user);
+    \node[attribute] (phone) at (7,-0.75) {Telefone} edge (user);
+    \node[attribute] (countrycode) at (10,-0.75) {Cód. país} edge (phone);
+    \node[attribute] (areacode) at (10,-1.75) {DDD} edge (phone);
+    \node[attribute] (phonenumber) at (10,-2.75) {Número} edge (phone);
+    \node[attribute] (address) at (4,-2) {Endereço} edge (user);
+    \node[attribute] (claim) at (-4,2) {Denunciado} edge (user);
+    \node[attribute] (ban) at (0,2) {Banido} edge (user);
+    \node[attribute] (user-type) at (2,2) {Tipo} edge (user);
+    \node at (-0.5,-2) {Tipo};
+    
+    \node[entity] (teacher) at (0,-6) {Professor} edge[derive] (isuser);
+    \node[entity] (moderator) at (-6,-3) {Moderador} edge[derive] (isuser);
+    \node[entity] (assistant) at (4,-4) {Monitor} edge[derive] (isuser);
+    \node[entity] (student) at (-6, -6) {Aluno} edge[derive] (isuser);
+    
+    \node[weak entity] (evaluation) at (15,-7) {Avaliação};
+    \node[attribute] (datetime) at (18,-6) {\dashuline{Data/Hora}} edge (evaluation);
+    \node[attribute] (rating) at (18,-7) {Nota} edge (evaluation);
+    \node[attribute] (rating-type) at (18,-8) {Tipo} edge (evaluation);
+    \node[yshift=9pt] at (13,-7) {Tipo};
+
+    \node[entity] (subject) at (0,-12) {Disciplina};
+    \node[attribute] (subject-name) at (-2,-14) {\key{Nome}} edge (subject);
+    \node[attribute] (subject-description) at (2,-14) {Descrição} edge (subject);
+    \node[entity] (course) at (-6,-12) {Curso};
+    \node[attribute] (course-name) at (-10,-10) {\key{Nome}} edge (course);
+    \node[attribute] (course-creation) at (-10,-11) {\key{Data de criação}} edge (course);
+    \node[attribute] (course-descrição) at (-10,-12) {Descrição} edge (course);
+    \node[attribute] (course-online) at (-10,-13) {É online} edge (course);
+    \node[attribute] (course-local) at (-10,-14) {Local} edge (course);
+    \node[weak entity] (class) at (8,-12) {Turma};
+    
+    \node[weak entity] (test) at (11,-15) {Teste};
+    \node[attribute] (test-titulo) at (13.5,-14) {\dashuline{Título}} edge (test);
+    \node[attribute] (test-template) at (13.5,-15) {Template} edge (test);
+    \node[attribute] (test-date) at (13.5,-16) {Data/Hora} edge (test);
+    \node[entity] (event) at (8,-18) {Evento};
+    \node[attribute] (event-date) at (10,-16.5) {\key{Data/Hora}} edge (event);
+    \node[attribute] (event-title) at (12,-17) {\key{Título}} edge (event);
+    \node[attribute] (event-description) at (13,-18) {Descrição} edge (event);
+    \node[weak entity] (comment) at (-10,0) {Comentário};
+    \node[attribute] (comment-date) at (-7,2) {\dashuline{Data/Hora}} edge (comment);
+    \node[attribute] (comment-content) at (-7,1) {Conteúdo} edge (comment);
+
+    \node[isa] (isevaluation) at (12,-7) {d} edge[total] (evaluation);
+
+    \node[entity] (ratings-teacher) at (8,-7) {Avaliação \\ Professor} edge[derive] (isevaluation);
+    \node[entity] (ratings-assistant) at (12,-4) {Avaliação \\ Monitor} edge[derive] (isevaluation);
+    \node[entity] (ratings-course) at (15,-12) {Avaliação \\ Curso} edge[derive] (isevaluation);
+
+    \node[ident relationship] (evaluates) at (19,-12) {Cria}
+        edge[total] (evaluation);
+    \coordinate (P01) at (-8,-6) {};
+    \coordinate (P02) at (-8,-21) {};
+    \coordinate (P03) at (19,-21) {};
+    \draw[link] (student) -- (P01) -- (P02) -- (P03) -- (evaluates);
+    \node at (19,-13) [xshift=7pt] {$1$};
+    \node at (18.5,-11) [yshift=3pt] {$N$};
+    
+    \node[relationship] (teacher-evaluated) at (4,-7) {Avaliado}
+        edge (teacher)
+        edge[total] (ratings-teacher);
+    \node at (6,-4) [yshift=7pt] {$1$};
+    \node at (10,-4) [yshift=9pt] {$N$};
+
+    \node[relationship] (assistant-evaluated) at (8,-4) {Avaliado}
+        edge (assistant)
+        edge[total] (ratings-assistant);
+    \node at (2,-6.5) [yshift=7pt] {$1$};
+    \node at (6,-7) [yshift=9pt] {$N$};
+
+    \node[relationship] (course-evaluated) at (6,-19) {Avaliado};
+    \coordinate (Q01) at (-6,-19) {};
+    \draw[link] (course-evaluated) -- (Q01) -- (course);
+    \coordinate (Q02) at (15,-19) {};
+    \draw[total] (course-evaluated) -- (Q02) -- (ratings-course);
+    \node at (7.5,-19) [yshift=-9pt] {$N$};
+    \node at (4.5,-19) [yshift=-9pt] {$1$};
+
+    \node[relationship] (teaches) at (0,-9) {Ministra}
+        edge (teacher)
+        edge (subject);
+    \node at (0,-7) [xshift=7pt] {$1$};
+    \node at (0,-11) [xshift=7pt] {$N$};
+
+    \node[relationship] (coursehas) at (-3,-12) {Possui}
+        edge (course)
+        edge (subject);
+    \node at (-1.5,-12)[yshift=7pt] {$N$};
+    \node at (-4.5,-12)[yshift=7pt] {$N$};
+
+    \node[relationship] (subscription) at (-6,-9) {Inscreve-se} 
+        edge (student)
+        edge (course);
+    \node at (-6,-7) [xshift=7pt] {$N$};
+    \node at (-6,-11) [xshift=7pt] {$N$};
+
+    \node[ident relationship] (time) at (4,-12) {Disponibiliza}
+        edge (subject)
+        edge[total] (class);
+    \node at (2,-12) [yshift=7pt] {$1$};
+    \node at (6,-12) [yshift=9pt] {$N$};
+
+    \node[ident relationship] (applies) at (11,-12) {Realiza}
+        edge (class)
+        edge (student)
+        edge[total] (test);
+    \node at (10,-11.5) [yshift=3pt] {$1$};
+    \node at (9.5,-12) [yshift=-7pt] {$1$};
+    \node at (11,-13.5) [xshift=7pt] {$N$};
+    
+    \node[relationship] (applies) at (8,-15) {Realiza}
+        edge (class)
+        edge (event);
+    \node at (8,-13.5) [xshift=7pt] {$1$};
+    \node at (8,-16.5) [xshift=-7pt] {$N$};
+
+    \node[ident relationship] (comments) at (-5,0) {Publica}
+        edge[total] (comment)
+        edge (user);
+    \node at (-3, 0) [yshift=7pt] {$1$};
+    \node at (-7, 0) [yshift=7pt] {$N$};
+
+    \node[relationship] (bans-comment) at (-10,-3) {Bane}
+        edge (comment)
+        edge (moderator);
+    \node at (-9,-3) [yshift=7pt] {$1$};
+    \node at (-10,-2) [xshift=7pt] {$N$};
+
+    \node[relationship] (bans-user) at (-3,-1.5) {Bane}
+        edge (moderator)
+        edge (user);
+    \node at (-3.5,-2) [yshift=-5pt,xshift=-0.25cm] {$1$};
+    \node at (-2.5,-1) [yshift=5pt,xshift=0.25cm] {$N$};
+
+    \node[relationship] (student-class) at (8,-9) {É membro}
+        edge (student)
+        edge (class);
+    \node at (8,-10.5) [xshift=7pt] {$N$};
+    \node at (7,-8.5) {$N$};
+    
+    \node[relationship] (comment-answer) at (-10,2) {Responde};
+    \coordinate (R01) at (-8.9,2);
+    \coordinate (R02) at (-11.1,2);
+    \draw[link] (comment) -- (R01);
+    \draw[link] (comment) -- (R02);
+    \node at (-8.9,2) [xshift=5pt] {$N$};
+    \node at (-11.1,2) [xshift=-5pt] {$1$};
+
+    \node[relationship] (teacher-responsible) at (-3,-8.5) {Responsável}
+        edge (teacher)
+        edge (course);
+    \node at (-2,-8) [xshift=5pt,yshift=0.25cm] {$1$};
+    \node at (-4,-9) [yshift=-0.25cm] {$1$};
+    
+\end{tikzpicture}
+
+\end{document}

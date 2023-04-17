@@ -38,3 +38,5 @@
     - disciplinas;
     - trilhas;
     - instituição;
+    
+    Link para o DER: https://drive.google.com/file/d/1m9uqEMhl9Mzbkj2LUote26wvxPk8y39t/view?usp=sharing

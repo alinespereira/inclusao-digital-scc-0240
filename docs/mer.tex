@@ -89,7 +89,6 @@
     \node[attribute] (phonenumber) at (10,-2.75) {Número} edge (phone);
     \node[attribute] (address) at (4,-2) {Endereço} edge (user);
     \node[attribute] (claim) at (-4,2) {Denunciado} edge (user);
-    \node[attribute] (ban) at (0,2) {Banido} edge (user);
     \node[attribute] (user-type) at (2,2) {Tipo} edge (user);
     \node at (-0.5,-2) {Tipo};
     
@@ -105,15 +104,28 @@
     \node[yshift=9pt] at (13,-7) {Tipo};
 
     \node[entity] (subject) at (0,-12) {Disciplina};
-    \node[attribute] (subject-name) at (-2,-14) {\key{Nome}} edge (subject);
-    \node[attribute] (subject-description) at (2,-14) {Descrição} edge (subject);
+    \node[attribute] (subject-name) at (-3,-14) {\key{Nome}} edge (subject);
+    \node[attribute] (subject-description) at (-2,-15) {Descrição} edge (subject);
+    \node[relationship] (subject-requirement) at (2, -15) {Requer};
+        \coordinate (SR01) at (2,-14.1);
+        \coordinate (SR02) at (1.1,-15);
+        \draw[link] (subject) -- (SR01);
+        \draw[link] (subject) -- (SR02);
+        \node at (SR01) [yshift=10pt] {$1$};
+        \node at (SR02) [xshift=-10pt] {$N$};
+    
     \node[entity] (course) at (-6,-12) {Curso};
     \node[attribute] (course-name) at (-10,-10) {\key{Nome}} edge (course);
     \node[attribute] (course-creation) at (-10,-11) {\key{Data de criação}} edge (course);
     \node[attribute] (course-descrição) at (-10,-12) {Descrição} edge (course);
     \node[attribute] (course-online) at (-10,-13) {É online} edge (course);
     \node[attribute] (course-local) at (-10,-14) {Local} edge (course);
+    
     \node[weak entity] (class) at (8,-12) {Turma};
+    \node[attribute] (class-id) at (4,-16) {\dashuline{ID}} edge (class);
+    \node[multi attribute] (class-schedule) at (5,-17) {Horários} edge (class);
+    \node[attribute] (class-schedule-day) at (1,-17) {Dia da semana} edge (class-schedule);
+    \node[attribute] (class-schedule-time) at (1,-18) {Hora} edge (class-schedule);
     
     \node[weak entity] (test) at (11,-15) {Teste};
     \node[attribute] (test-titulo) at (13.5,-14) {\dashuline{Título}} edge (test);
@@ -188,11 +200,10 @@
 
     \node[ident relationship] (applies) at (11,-12) {Realiza}
         edge (class)
-        edge (student)
         edge[total] (test);
-    \node at (10,-11.5) [yshift=3pt] {$1$};
     \node at (9.5,-12) [yshift=-7pt] {$1$};
     \node at (11,-13.5) [xshift=7pt] {$N$};
+
     
     \node[relationship] (applies) at (8,-15) {Realiza}
         edge (class)
@@ -211,10 +222,11 @@
         edge (moderator);
     \node at (-9,-3) [yshift=7pt] {$1$};
     \node at (-10,-2) [xshift=7pt] {$N$};
-
+    
     \node[relationship] (bans-user) at (-3,-1.5) {Bane}
         edge (moderator)
         edge (user);
+    \node[attribute] (ban) at (-6,-1.5) {Banido} edge (bans-user);
     \node at (-3.5,-2) [yshift=-5pt,xshift=-0.25cm] {$1$};
     \node at (-2.5,-1) [yshift=5pt,xshift=0.25cm] {$N$};
 

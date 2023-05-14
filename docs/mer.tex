@@ -43,34 +43,25 @@
 
 \begin{document}
 
-% \begin{tikzpicture}[node distance=7em]
-%     \node[entity] (person) {Person};
-%     \node[attribute] (pid) [left of=person] {\key{ID}} edge (person);
-%     \node[attribute] (name) [above left of=person] {Name} edge (person);
-%     \node[multi attribute] (phone) [above of=person] {Phone} edge (person);
-%     \node[attribute] (address) [above right of=person] {Address} edge (person);
-%     \node[attribute] (street) [above right of=address] {Street} edge (address);
-%     \node[attribute] (city) [right of=address] {City} edge (address);
-%     \node[derived attribute] (age) [right of=person] {Age} edge (person);
-%     \node[relationship] (uses) [below of=person] {Uses} edge (person);
-%     \node[weak entity] (tool) [below of=uses] {Tool} edge [derive] (uses);
-%     \node[attribute] (tid) [left of=tool] {\key{ID}} edge (tool);
-%     \node[attribute] (tname) [right of=tool] {Name} edge (tool);
-% \end{tikzpicture}
-
+\def\xgridstart{-13}
+\def\xgridend{32}
+\def\ygridstart{-22}
+\def\ygridend{4}
 
 \begin{tikzpicture}[node distance=7em]
-    \node[draw=none] at (-12, -22) {};
-    \node[draw=none] at (-12, 4) {};
-    \node[draw=none] at (20, -22) {};
-    \node[draw=none] at (20, 4) {};
-    % \foreach \y in {2,1,...,-22} {
-    %     \draw[gray, very thin, dashed] (-10.5,\y) -- (20.5,\y);
-    %     \node at (-11,\y){\y};
+    \node[draw=none] at (\xgridstart - 1, \ygridstart - 1) {};
+    \node[draw=none] at (\xgridstart - 1, \ygridend + 1) {};
+    \node[draw=none] at (\xgridend + 1, \ygridstart - 1) {};
+    \node[draw=none] at (\xgridend + 1, \ygridend + 1) {};
+    % \foreach \y in {\ygridstart,...,\ygridend} {
+    %     \draw[gray, very thin, dashed] (\xgridstart,\y) -- (\xgridend,\y);
+    %     \node[anchor=east] at (\xgridstart,\y){\y};
+    %     \node[anchor=west] at (\xgridend,\y){\y};
     % }
-    % \foreach \x in {-10,-9,...,20} {
-    %     \draw[gray, very thin, dashed] (\x,2.5) -- (\x,-22.5);
-    %     \node at (\x,3){\x};
+    % \foreach \x in {\xgridstart,...,\xgridend} {
+    %     \draw[gray, very thin, dashed] (\x,\ygridstart) -- (\x,\ygridend);
+    %     \node[anchor=north] at (\x,\ygridstart){\x};
+    %     \node[anchor=south] at (\x,\ygridend){\x};
     % }
 
     \node[entity] (user) {Usuário};
@@ -97,10 +88,10 @@
     \node[entity] (assistant) at (4,-4) {Monitor} edge[derive] (isuser);
     \node[entity] (student) at (-6, -6) {Aluno} edge[derive] (isuser);
     
-    \node[weak entity] (evaluation) at (15,-7) {Avaliação};
-    \node[attribute] (datetime) at (18,-6) {\dashuline{Data/Hora}} edge (evaluation);
-    \node[attribute] (rating) at (18,-7) {Nota} edge (evaluation);
-    \node[attribute] (rating-type) at (18,-8) {Tipo} edge (evaluation);
+    \node[weak entity] (evaluation) at (22,-7) {Avaliação};
+    \node[attribute] (datetime) at (25,-6) {\dashuline{Data/Hora}} edge (evaluation);
+    \node[attribute] (rating) at (25,-7) {Nota} edge (evaluation);
+    \node[attribute] (rating-type) at (25,-8) {Tipo} edge (evaluation);
     \node[yshift=9pt] at (13,-7) {Tipo};
 
     \node[entity] (subject) at (0,-12) {Disciplina};
@@ -111,7 +102,7 @@
         \coordinate (SR02) at (1.1,-15);
         \draw[link] (subject) -- (SR01);
         \draw[link] (subject) -- (SR02);
-        \node at (SR01) [yshift=10pt] {$1$};
+        \node at (SR01) [yshift=10pt] {$N$};
         \node at (SR02) [xshift=-10pt] {$N$};
     
     \node[entity] (course) at (-6,-12) {Curso};
@@ -123,12 +114,12 @@
     
     \node[weak entity] (class) at (8,-12) {Turma};
     \node[attribute] (class-id) at (4,-16) {\dashuline{ID}} edge (class);
-    \node[multi attribute] (class-schedule) at (5,-17) {Horários} edge (class);
-    \node[attribute] (class-schedule-day) at (1,-17) {Dia da semana} edge (class-schedule);
-    \node[attribute] (class-schedule-time) at (1,-18) {Hora} edge (class-schedule);
+    \node[multi attribute] (class-schedule) at (6,-17) {Horários} edge (class);
+    \node[attribute] (class-schedule-day) at (2,-17) {Dia da semana} edge (class-schedule);
+    \node[attribute] (class-schedule-time) at (3,-18) {Hora} edge (class-schedule);
     
-    \node[weak entity] (test) at (11,-15) {Teste};
-    \node[attribute] (test-titulo) at (13.5,-14) {\dashuline{Título}} edge (test);
+    \node[entity] (test) at (11,-15) {Teste};
+    \node[attribute] (test-titulo) at (13.5,-14) {\key{Título}} edge (test);
     \node[attribute] (test-template) at (13.5,-15) {Template} edge (test);
     \node[attribute] (test-date) at (13.5,-16) {Data/Hora} edge (test);
     \node[entity] (event) at (8,-18) {Evento};
@@ -141,18 +132,71 @@
 
     \node[isa] (isevaluation) at (12,-7) {d} edge[total] (evaluation);
 
-    \node[entity] (ratings-teacher) at (8,-7) {Avaliação \\ Professor} edge[derive] (isevaluation);
-    \node[entity] (ratings-assistant) at (12,-4) {Avaliação \\ Monitor} edge[derive] (isevaluation);
-    \node[entity] (ratings-course) at (15,-12) {Avaliação \\ Curso} edge[derive] (isevaluation);
+    \node[entity] (ratings-teacher) at (8,-7) {AvaliaçãoProfessor} edge[derive] (isevaluation);
+    \node[entity] (ratings-assistant) at (12,-4) {AvaliaçãoMonitor} edge[derive] (isevaluation);
+    \node[entity] (ratings-subject) at (15,-12) {AvaliaçãoDisciplina} edge[derive] (isevaluation);
+    \node[entity] (ratings-course) at (19,-12) {AvaliaçãoCurso} edge[derive] (isevaluation);
 
-    \node[ident relationship] (evaluates) at (19,-12) {Cria}
+    \node[entity] (research) at (15,2) {PesquisaIBGE};
+    \node[attribute] (research-id) at (18,3) {\key{ID}} edge (research);
+    \node[attribute] (research-name) at (18,2) {Nome} edge (research);
+    \node[multi attribute] (research-aggregates) at (18,1) {Agregados} edge (research);
+    \node[attribute] (aggregate-id) at (21,3) {\key{ID}} edge (research-aggregates);
+    \node[attribute] (aggregate-name) at (21,2) {Nome} edge (research-aggregates);
+    \node[multi attribute] (aggregate-periods) at (21,1) {Períodos} edge (research-aggregates);
+    \node[attribute] (aggregate-metadata) at (21,0) {Metadados} edge (research-aggregates);
+    \node[attribute] (metadata-subject) at (25,2) {Assunto} edge (aggregate-metadata);
+    \node[multi attribute] (metadata-variables) at (25,1) {Variáveis} edge (aggregate-metadata);
+    \node[multi attribute] (metadata-classifications) at (25,0) {Classificações} edge (aggregate-metadata);
+
+    \node[entity] (variable) at (20,-2) {VariávelIBGE};
+    \node[attribute] (variable-id) at (23,-1) {\key{ID}} edge (variable);
+    \node[attribute] (variable-name) at (23,-2) {Nome} edge (variable);
+    \node[attribute] (variable-unity) at (23,-3) {Unidade} edge (variable);
+    \node[multi attribute] (variable-results) at (23,-4) {Resultados} edge (variable);
+    \node[multi attribute] (results-classifications) at (26,-3) {Classificações} edge (variable-results);
+    \node[multi attribute] (results-series) at (26,-4) {Séries} edge (variable-results);
+    \node[attribute] (series-locality) at (30,-3) {Localidade} edge (results-series);
+    \node[attribute] (locality-id) at (27,-1.5) {ID} edge (series-locality);
+    \node[attribute] (locality-level) at (29,-1.5) {Nível} edge (series-locality);
+    \node[attribute] (level-id) at (28,0) {ID} edge (locality-level);
+    \node[attribute] (level-name) at (30,0) {Nome} edge (locality-level);
+    \node[attribute] (locality-name) at (31,-1.5) {Nome} edge (series-locality);
+    \node[multi attribute] (series-result) at (29,-4) {Série} edge (results-series);
+    \node[attribute] (result-period) at (28,-5) {Período} edge (series-result);
+    \node[attribute] (result-value) at (30,-5) {Valor} edge (series-result);
+
+    \node[entity] (map) at (17,-4) {MapaIBGE};
+    \node[attribute] (map-id) at (17,-5.5) {\key{ID}} edge (map);
+    \node[attribute] (map-name) at (19,-5.5) {Nome} edge (map);
+    \node[attribute] (map-mesh) at (21,-5.5) {Malha} edge (map);
+
+    \node[relationship] at (17,-1) {Resultados}
+        edge (research)
+        edge[total] (variable);
+    \node at (18.5,-1) {$N$};
+    \node at (16,0) {$1$};
+
+    \node[relationship] (map-variable) at (20,-4) {Limita}
+        edge (map)
+        edge[total] (variable);
+    \node at (19,-4) [yshift=9pt] {$N$};
+    \node at (20,-3) [xshift=9pt] {$N$};
+
+    \node[relationship] at (15,-5) {Consulta}
+        edge (research)
+        edge (teacher);
+    \node at (15,-4) [xshift=7pt,yshift=7pt] {$N$};
+    \node at (14,-5) [xshift=-7pt,yshift=7pt] {$N$};
+
+    \node[ident relationship] (evaluates) at (22,-12) {Cria}
         edge[total] (evaluation);
     \coordinate (P01) at (-8,-6) {};
-    \coordinate (P02) at (-8,-21) {};
-    \coordinate (P03) at (19,-21) {};
+    \coordinate (P02) at (-8,-22) {};
+    \coordinate (P03) at (22,-22) {};
     \draw[link] (student) -- (P01) -- (P02) -- (P03) -- (evaluates);
-    \node at (19,-13) [xshift=7pt] {$1$};
-    \node at (18.5,-11) [yshift=3pt] {$N$};
+    \node at (22,-13) [xshift=7pt] {$1$};
+    \node at (22,-11) [xshift=7pt] {$N$};
     
     \node[relationship] (teacher-evaluated) at (4,-7) {Avaliado}
         edge (teacher)
@@ -166,13 +210,19 @@
     \node at (2,-6.5) [yshift=7pt] {$1$};
     \node at (6,-7) [yshift=9pt] {$N$};
 
-    \node[relationship] (course-evaluated) at (6,-19) {Avaliado};
-    \coordinate (Q01) at (-6,-19) {};
-    \draw[link] (course-evaluated) -- (Q01) -- (course);
-    \coordinate (Q02) at (15,-19) {};
-    \draw[total] (course-evaluated) -- (Q02) -- (ratings-course);
-    \node at (7.5,-19) [yshift=-9pt] {$N$};
-    \node at (4.5,-19) [yshift=-9pt] {$1$};
+    \node[relationship] (subject-evaluated) at (0,-19) {Avaliada};
+    \draw[link] (subject-evaluated) -- (subject);
+    \coordinate (Q01) at (15,-19) {};
+    \draw[total] (subject-evaluated) -- (Q01) -- (ratings-subject);
+    \node at (1,-19) [xshift=10pt,yshift=-9pt] {$N$};
+    \node at (0,-18) [xshift=10pt,yshift=9pt] {$1$};
+
+    \node[relationship] (course-evaluated) at (19,-20.5) {Avaliado};
+    \coordinate (R01) at (-6,-20.5) {};
+    \draw[link] (course-evaluated) -- (R01) -- (course);
+    \draw[total] (course-evaluated) -- (ratings-course);
+    \node at (19,-19.5) [xshift=10pt,yshift=9pt] {$N$};
+    \node at (18,-20.5) [xshift=-10pt, yshift=-9pt] {$1$};
 
     \node[relationship] (teaches) at (0,-9) {Ministra}
         edge (teacher)
@@ -197,12 +247,6 @@
         edge[total] (class);
     \node at (2,-12) [yshift=7pt] {$1$};
     \node at (6,-12) [yshift=9pt] {$N$};
-
-    \node[ident relationship] (applies) at (11,-12) {Realiza}
-        edge (class)
-        edge[total] (test);
-    \node at (9.5,-12) [yshift=-7pt] {$1$};
-    \node at (11,-13.5) [xshift=7pt] {$N$};
 
     
     \node[relationship] (applies) at (8,-15) {Realiza}
@@ -230,6 +274,13 @@
     \node at (-3.5,-2) [yshift=-5pt,xshift=-0.25cm] {$1$};
     \node at (-2.5,-1) [yshift=5pt,xshift=0.25cm] {$N$};
 
+    \node[entity, minimum width=3cm, minimum height=2.6cm] (student-class-membership) at (8, -9) {É membro};
+    \node[relationship] (applies) at (11,-9) {Realiza}
+        edge (student-class-membership)
+        edge[total] (test);
+    \node at (10,-9) [yshift=-7pt] {$1$};
+    \node at (11,-10) [xshift=7pt] {$N$};
+
     \node[relationship] (student-class) at (8,-9) {É membro}
         edge (student)
         edge (class);
@@ -237,10 +288,10 @@
     \node at (7,-8.5) {$N$};
     
     \node[relationship] (comment-answer) at (-10,2) {Responde};
-    \coordinate (R01) at (-8.9,2);
-    \coordinate (R02) at (-11.1,2);
-    \draw[link] (comment) -- (R01);
-    \draw[link] (comment) -- (R02);
+    \coordinate (S01) at (-8.9,2);
+    \coordinate (S02) at (-11.1,2);
+    \draw[link] (comment) -- (S01);
+    \draw[link] (comment) -- (S02);
     \node at (-8.9,2) [xshift=5pt] {$N$};
     \node at (-11.1,2) [xshift=-5pt] {$1$};
 

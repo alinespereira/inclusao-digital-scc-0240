@@ -53,16 +53,16 @@
     \node[draw=none] at (\xgridstart - 1, \ygridend + 1) {};
     \node[draw=none] at (\xgridend + 1, \ygridstart - 1) {};
     \node[draw=none] at (\xgridend + 1, \ygridend + 1) {};
-    \foreach \y in {\ygridstart,...,\ygridend} {
-        \draw[gray, very thin, dashed] (\xgridstart,\y) -- (\xgridend,\y);
-        \node[anchor=east] at (\xgridstart,\y){\y};
-        \node[anchor=west] at (\xgridend,\y){\y};
-    }
-    \foreach \x in {\xgridstart,...,\xgridend} {
-        \draw[gray, very thin, dashed] (\x,\ygridstart) -- (\x,\ygridend);
-        \node[anchor=north] at (\x,\ygridstart){\x};
-        \node[anchor=south] at (\x,\ygridend){\x};
-    }
+    % \foreach \y in {\ygridstart,...,\ygridend} {
+    %     \draw[gray, very thin, dashed] (\xgridstart,\y) -- (\xgridend,\y);
+    %     \node[anchor=east] at (\xgridstart,\y){\y};
+    %     \node[anchor=west] at (\xgridend,\y){\y};
+    % }
+    % \foreach \x in {\xgridstart,...,\xgridend} {
+    %     \draw[gray, very thin, dashed] (\x,\ygridstart) -- (\x,\ygridend);
+    %     \node[anchor=north] at (\x,\ygridstart){\x};
+    %     \node[anchor=south] at (\x,\ygridend){\x};
+    % }
 
     \node[entity] (user) {Usuário};
     \node[isa] (isuser) at (0, -3) {d} edge[total] (user);
@@ -148,17 +148,19 @@
     \node[entity] (variable) at (20,-2) {VariávelIBGE};
     \node[attribute] (variable-id) at (17,-1) {\key{ID}} edge (variable);
     \node[attribute] (variable-name) at (17,-2) {Nome} edge (variable);
-    \node[attribute] (variable-unity) at (23,-3) {Unidade} edge (variable);
-    \node[multi attribute] (variable-results) at (23,-4) {Resultados} edge (variable);
-    \node[multi attribute] (results-classifications) at (26,-3) {Classificações} edge (variable-results);
-    \node[multi attribute] (results-series) at (26,-4) {Séries} edge (variable-results);
+    \node[attribute] (variable-unity) at (20,-0.5) {Unidade} edge (variable);
+    
+    \node[entity] (results) at (23,-4) {Resultados};
+    \node[multi attribute] (results-classifications) at (26,-3) {Classificações} edge (results);
+    \node[multi attribute] (results-series) at (26,-4) {Séries} edge (results);
+    
     \node[attribute] (series-locality) at (30,-3) {Localidade} edge (results-series);
     \node[attribute] (locality-id) at (27,-1.5) {ID} edge (series-locality);
     \node[attribute] (locality-level) at (29,-1.5) {Nível} edge (series-locality);
     \node[attribute] (level-id) at (28,0) {ID} edge (locality-level);
     \node[attribute] (level-name) at (30,0) {Nome} edge (locality-level);
     \node[attribute] (locality-name) at (31,-1.5) {Nome} edge (series-locality);
-    \node[multi attribute] (series-result) at (29,-4) {Série} edge (results-series);
+    \node[attribute] (series-result) at (29,-4) {Série} edge (results-series);
     \node[attribute] (result-period) at (28,-5) {Período} edge (series-result);
     \node[attribute] (result-value) at (30,-5) {Valor} edge (series-result);
 
@@ -173,17 +175,23 @@
     \node at (19,2) [xshift=-9pt,yshift=7pt] {$1$};
     \node at (21,2) [xshift=7pt,yshift=9pt] {$N$};
 
-    \node[relationship] at (24,-1) {Mede-se}
+    \node[relationship] at (24,0) {Mede-se}
         edge (aggregate)
         edge[total] (variable);
-    \node at (24,0) [xshift=9pt] {$1$};
-    \node at (23,-1)[xshift=-9pt] {$N$};
+    \node at (24,1) [xshift=9pt] {$1$};
+    \node at (23,0)[xshift=-9pt] {$N$};
+
+    \node[relationship] at (23,-2) {Avalia}
+        edge (variable)
+        edge[total] (results);
+    \node at (22,-2) [yshift=9pt] {$1$};
+    \node at (23,-3)[xshift=9pt,yshift=-7pt] {$N$};
 
     \node[relationship] (map-variable) at (20,-4) {Limita}
         edge (map)
-        edge[total] (variable);
-    \node at (19,-4) [yshift=9pt] {$N$};
-    \node at (20,-3) [xshift=9pt] {$N$};
+        edge[total] (results);
+    \node at (19,-4) [yshift=9pt] {$1$};
+    \node at (21,-4) [yshift=9pt] {$N$};
 
     \node[relationship] at (15,-5) {Consulta}
         edge (research)

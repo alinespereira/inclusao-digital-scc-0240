@@ -53,16 +53,16 @@
     \node[draw=none] at (\xgridstart - 1, \ygridend + 1) {};
     \node[draw=none] at (\xgridend + 1, \ygridstart - 1) {};
     \node[draw=none] at (\xgridend + 1, \ygridend + 1) {};
-    % \foreach \y in {\ygridstart,...,\ygridend} {
-    %     \draw[gray, very thin, dashed] (\xgridstart,\y) -- (\xgridend,\y);
-    %     \node[anchor=east] at (\xgridstart,\y){\y};
-    %     \node[anchor=west] at (\xgridend,\y){\y};
-    % }
-    % \foreach \x in {\xgridstart,...,\xgridend} {
-    %     \draw[gray, very thin, dashed] (\x,\ygridstart) -- (\x,\ygridend);
-    %     \node[anchor=north] at (\x,\ygridstart){\x};
-    %     \node[anchor=south] at (\x,\ygridend){\x};
-    % }
+    \foreach \y in {\ygridstart,...,\ygridend} {
+        \draw[gray, very thin, dashed] (\xgridstart,\y) -- (\xgridend,\y);
+        \node[anchor=east] at (\xgridstart,\y){\y};
+        \node[anchor=west] at (\xgridend,\y){\y};
+    }
+    \foreach \x in {\xgridstart,...,\xgridend} {
+        \draw[gray, very thin, dashed] (\x,\ygridstart) -- (\x,\ygridend);
+        \node[anchor=north] at (\x,\ygridstart){\x};
+        \node[anchor=south] at (\x,\ygridend){\x};
+    }
 
     \node[entity] (user) {Usuário};
     \node[isa] (isuser) at (0, -3) {d} edge[total] (user);
@@ -138,20 +138,16 @@
     \node[entity] (ratings-course) at (19,-12) {AvaliaçãoCurso} edge[derive] (isevaluation);
 
     \node[entity] (research) at (15,2) {PesquisaIBGE};
-    \node[attribute] (research-id) at (18,3) {\key{ID}} edge (research);
-    \node[attribute] (research-name) at (18,2) {Nome} edge (research);
-    \node[multi attribute] (research-aggregates) at (18,1) {Agregados} edge (research);
-    \node[attribute] (aggregate-id) at (21,3) {\key{ID}} edge (research-aggregates);
-    \node[attribute] (aggregate-name) at (21,2) {Nome} edge (research-aggregates);
-    \node[multi attribute] (aggregate-periods) at (21,1) {Períodos} edge (research-aggregates);
-    \node[attribute] (aggregate-metadata) at (21,0) {Metadados} edge (research-aggregates);
-    \node[attribute] (metadata-subject) at (25,2) {Assunto} edge (aggregate-metadata);
-    \node[multi attribute] (metadata-variables) at (25,1) {Variáveis} edge (aggregate-metadata);
-    \node[multi attribute] (metadata-classifications) at (25,0) {Classificações} edge (aggregate-metadata);
+    \node[attribute] (research-id) at (12,3) {\key{ID}} edge (research);
+    \node[attribute] (research-name) at (12,2) {Nome} edge (research);
+    \node[entity] (aggregate) at (24,2) {Agregado};
+    \node[attribute] (aggregate-id) at (27,3) {\key{ID}} edge (aggregate);
+    \node[attribute] (aggregate-name) at (27,2) {Nome} edge (aggregate);
+    \node[attribute] (metadata-subject) at (27,1) {Assunto} edge (aggregate);
 
     \node[entity] (variable) at (20,-2) {VariávelIBGE};
-    \node[attribute] (variable-id) at (23,-1) {\key{ID}} edge (variable);
-    \node[attribute] (variable-name) at (23,-2) {Nome} edge (variable);
+    \node[attribute] (variable-id) at (17,-1) {\key{ID}} edge (variable);
+    \node[attribute] (variable-name) at (17,-2) {Nome} edge (variable);
     \node[attribute] (variable-unity) at (23,-3) {Unidade} edge (variable);
     \node[multi attribute] (variable-results) at (23,-4) {Resultados} edge (variable);
     \node[multi attribute] (results-classifications) at (26,-3) {Classificações} edge (variable-results);
@@ -171,11 +167,17 @@
     \node[attribute] (map-name) at (19,-5.5) {Nome} edge (map);
     \node[attribute] (map-mesh) at (21,-5.5) {Malha} edge (map);
 
-    \node[relationship] at (17,-1) {Resultados}
+    \node[relationship] at (20,2) {Agrega-se}
         edge (research)
+        edge[total] (aggregate);
+    \node at (19,2) [xshift=-9pt,yshift=7pt] {$1$};
+    \node at (21,2) [xshift=7pt,yshift=9pt] {$N$};
+
+    \node[relationship] at (24,-1) {Mede-se}
+        edge (aggregate)
         edge[total] (variable);
-    \node at (18.5,-1) {$N$};
-    \node at (16,0) {$1$};
+    \node at (24,0) [xshift=9pt] {$1$};
+    \node at (23,-1)[xshift=-9pt] {$N$};
 
     \node[relationship] (map-variable) at (20,-4) {Limita}
         edge (map)

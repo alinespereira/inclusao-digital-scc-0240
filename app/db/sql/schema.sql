@@ -49,11 +49,10 @@ create table usuario (
         check (length(numero) between 8 and 9)
 );
 
-
 create function usuario_tipo(char(11)) returns varchar(9) as $$
     select tipo
     from usuario u
-    where u.cpf = cpf;
+    where u.cpf = $1;
 $$
 language sql;
 

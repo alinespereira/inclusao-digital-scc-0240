@@ -14,8 +14,8 @@ def generate_users(size: int = 2) -> list[dict]:
             'sobrenome': user['name']['last'],
             'email': user['email'],
             'cod_pais': '+55',
-            'ddd': random.choice(range(10, 100)),
-            'numero': random.choice(range(1000_0000, 9_9999_9999)),
+            'ddd': str(random.choice(range(10, 100))),
+            'numero': str(random.choice(range(1000_0000, 9_9999_9999))),
             'senha': user['login']['password'],
             'endereco': (
                 f"{user['location']['street']['name']}, {user['location']['street']['number']}, "

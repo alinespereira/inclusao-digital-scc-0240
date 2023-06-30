@@ -34,17 +34,19 @@ create table usuario (
     sobrenome varchar(120),
     email varchar(40) not null,
     cod_pais varchar(5),
-    ddd integer,
-    numero integer,
+    ddd char(2),
+    numero varchar(9),
     senha varchar(255) not null,
     endereco text,
     tipo varchar(9),
-    constraint usuario_pk 
+    constraint usuario_pk
         primary key (cpf),
-    constraint usuario_email_unique 
+    constraint usuario_email_unique
         unique (email),
-    constraint usuario_tipo 
-        check (tipo in ('moderador', 'professor', 'monitor', 'aluno'))
+    constraint usuario_tipo
+        check (tipo in ('moderador', 'professor', 'monitor', 'aluno')),
+    constraint usuario_numero
+        check (length(numero) between 8 and 9)
 );
 
 
@@ -57,49 +59,49 @@ language sql;
 
 create table moderador (
     usuario char(11) not null,
-    constraint moderador_pk 
+    constraint moderador_pk
         primary key (usuario),
-    constraint moderador_usuario_fk 
-        foreign key (usuario) 
+    constraint moderador_usuario_fk
+        foreign key (usuario)
         references usuario(cpf)
         on delete cascade,
-    constraint usuario_tipo_moderador 
+    constraint usuario_tipo_moderador
         check (usuario_tipo(usuario) = 'moderador')
 );
 
 create table professor (
     usuario char(11) not null,
-    constraint professor_pk 
+    constraint professor_pk
         primary key (usuario),
-    constraint professor_usuario_fk 
-        foreign key (usuario) 
+    constraint professor_usuario_fk
+        foreign key (usuario)
         references usuario(cpf)
         on delete cascade,
-    constraint usuario_tipo_professor 
+    constraint usuario_tipo_professor
         check (usuario_tipo(usuario) = 'professor')
 );
 
 create table monitor (
     usuario char(11) not null,
-    constraint monitor_pk 
+    constraint monitor_pk
         primary key (usuario),
-    constraint monitor_usuario_fk 
-        foreign key (usuario) 
+    constraint monitor_usuario_fk
+        foreign key (usuario)
         references usuario(cpf)
         on delete cascade,
-    constraint usuario_tipo_monitor 
+    constraint usuario_tipo_monitor
         check (usuario_tipo(usuario) = 'monitor')
 );
 
 create table aluno (
     usuario char(11) not null,
-    constraint aluno_pk 
+    constraint aluno_pk
         primary key (usuario),
-    constraint aluno_usuario_fk 
-        foreign key (usuario) 
+    constraint aluno_usuario_fk
+        foreign key (usuario)
         references usuario(cpf)
         on delete cascade,
-    constraint usuario_tipo_aluno 
+    constraint usuario_tipo_aluno
         check (usuario_tipo(usuario) = 'aluno')
 );
 
@@ -107,14 +109,14 @@ create table bane_usuario (
     usuario char(11) not null,
     moderador char(11) not null,
     banido boolean,
-    constraint bane_usuario_pk 
+    constraint bane_usuario_pk
         primary key (usuario),
-    constraint bane_usuario_moderador_fk 
-        foreign key (moderador) 
+    constraint bane_usuario_moderador_fk
+        foreign key (moderador)
         references moderador(usuario)
         on delete restrict,
-    constraint bane_usuario_usuario_fk 
-        foreign key (usuario) 
+    constraint bane_usuario_usuario_fk
+        foreign key (usuario)
         references usuario(cpf)
         on delete restrict
 );
@@ -125,10 +127,10 @@ create table comentario (
     conteudo text,
     resposta_de_usuario char(11),
     resposta_de_data_comentario timestamp,
-    constraint comentario_pk 
+    constraint comentario_pk
         primary key (usuario, data_comentario),
-    constraint comentario_responde_fk 
-        foreign key (usuario, data_comentario) 
+    constraint comentario_responde_fk
+        foreign key (usuario, data_comentario)
         references comentario(usuario, data_comentario)
         on delete set null
 );
@@ -137,10 +139,10 @@ create table bane_comentario (
     comentario_usuario char(11) not null,
     comentario_data_hora timestamp not null,
     moderador char(11) not null,
-    constraint bane_comentario_pk 
+    constraint bane_comentario_pk
         primary key (comentario_usuario, comentario_data_hora),
-    constraint bane_comentario_moderador_fk 
-        foreign key (moderador) 
+    constraint bane_comentario_moderador_fk
+        foreign key (moderador)
         references moderador(usuario)
         on delete restrict
 );
@@ -152,10 +154,10 @@ create table curso (
     "online" boolean,
     "local" varchar(120),
     professor char(11),
-    constraint curso_pk 
+    constraint curso_pk
         primary key (nome, data_criacao),
-    constraint curso_professor_fk 
-        foreign key (professor) 
+    constraint curso_professor_fk
+        foreign key (professor)
         references professor(usuario)
         on delete set null,
     constraint curso_professor_unique unique (professor)
@@ -165,10 +167,10 @@ create table disciplina (
     nome varchar(120) not null,
     descricao text,
     professor char(11),
-    constraint disciplina_pk 
+    constraint disciplina_pk
         primary key (nome),
-    constraint disciplina_professor_fk 
-        foreign key (professor) 
+    constraint disciplina_professor_fk
+        foreign key (professor)
         references professor(usuario)
         on delete set null
 );
@@ -177,14 +179,14 @@ create table inscricao (
     curso_nome varchar(120) not null,
     curso_data_criacao date not null,
     aluno char(11) not null,
-    constraint inscricao_pk 
+    constraint inscricao_pk
         primary key (curso_nome, curso_data_criacao, aluno),
-    constraint inscricao_curso_fk 
-        foreign key (curso_nome, curso_data_criacao) 
+    constraint inscricao_curso_fk
+        foreign key (curso_nome, curso_data_criacao)
         references curso(nome, data_criacao)
         on delete restrict,
-    constraint inscricao_aluno_fk 
-        foreign key (aluno) 
+    constraint inscricao_aluno_fk
+        foreign key (aluno)
         references aluno(usuario)
         on delete cascade
 );
@@ -193,14 +195,14 @@ create table curso_disciplina (
     curso_nome varchar(120) not null,
     curso_data_criacao date not null,
     disciplina varchar(120) not null,
-    constraint curso_disciplina_pk 
+    constraint curso_disciplina_pk
         primary key (curso_nome, curso_data_criacao, disciplina),
-    constraint curso_disciplina_curso_fk 
-        foreign key (curso_nome, curso_data_criacao) 
+    constraint curso_disciplina_curso_fk
+        foreign key (curso_nome, curso_data_criacao)
         references curso(nome, data_criacao)
         on delete cascade,
-    constraint curso_disciplina_disciplina_fk 
-        foreign key (disciplina) 
+    constraint curso_disciplina_disciplina_fk
+        foreign key (disciplina)
         references disciplina(nome)
         on delete restrict
 );
@@ -208,7 +210,7 @@ create table curso_disciplina (
 create table requisito (
     disciplina varchar(120) not null,
     requisito varchar(120) not null,
-    constraint requisito_pk 
+    constraint requisito_pk
         primary key (disciplina, requisito),
     constraint requisito_disciplina_fk
         foreign key (disciplina)
@@ -342,7 +344,7 @@ create table agregado_ibge (
 );
 
 create table variavel_ibge (
-    id integer not null
+    id integer not null,
     nome varchar(255),
     agregado integer not null,
     unidade varchar(20),
@@ -405,7 +407,7 @@ create table serie_ibge (
     constraint serie_ibge_pk
         primary key (classificacao, periodo),
     constraint serie_ibge_localidade_fk
-        foreign key localidade
+        foreign key (localidade)
         references localidade_ibge(id)
         on delete restrict
 );

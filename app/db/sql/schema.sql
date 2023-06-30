@@ -313,7 +313,7 @@ create table avaliacao_monitor (
 );
 
 create table pesquisa_ibge (
-    id integer not null,
+    id char(2) not null,
     nome varchar(255) not null,
     constraint pesquisa_ibge_pk
         primary key (id)
@@ -321,7 +321,7 @@ create table pesquisa_ibge (
 
 create table consulta (
     professor char(11) not null,
-    pesquisa integer not null,
+    pesquisa char(2) not null,
     constraint consulta_pk
         primary key (professor, pesquisa),
     constraint consulta_professor_fk
@@ -336,8 +336,8 @@ create table consulta (
 
 create table agregado_ibge (
     id integer not null,
-    pesquisa integer not null,
-    nome varchar(255),
+    pesquisa char(2) not null,
+    nome text,
     assunto text,
     constraint agregado_ibge_pk
         primary key (id),
@@ -351,7 +351,7 @@ create table variavel_ibge (
     id integer not null,
     nome varchar(255),
     agregado integer not null,
-    unidade varchar(20),
+    unidade varchar(80),
     constraint variavel_ibge_pk
         primary key (id),
     constraint variavel_ibge_agregado_fk
@@ -385,16 +385,16 @@ create table resultado_ibge (
 );
 
 create table nivel_ibge (
-    id integer not null,
-    nome varchar(50),
+    id varchar(5) not null,
+    nome varchar(255),
     constraint nivel_ibge_pk
         primary key (id)
 );
 
 create table localidade_ibge (
     id integer not null,
-    nome varchar(50),
-    nivel integer not null,
+    nome varchar(255),
+    nivel varchar(5) not null,
     constraint localidade_ibge_pk
         primary key (id),
     constraint localidade_ibge_nivel_fk

@@ -22,6 +22,10 @@ def main():
         'evento',
         # 'avaliacao_disciplina',
         # 'avaliacao_curso',
+        # 'membro_turma',
+        # 'horario_turma',
+        # 'teste',
+        # 'realiza_teste',
         'avaliacao_professor',
         'avaliacao_monitor',
         # 'pesquisa_ibge'

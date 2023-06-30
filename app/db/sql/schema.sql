@@ -27,6 +27,11 @@ drop table if exists professor;
 drop table if exists moderador;
 drop function if exists usuario_tipo;
 drop table if exists usuario;
+drop table if exists horario_turma;
+
+drop table if exists membro_turma;
+drop table if exists realiza_teste;
+drop table if exists teste;
 
 create table usuario (
     cpf char(11) not null,
@@ -409,4 +414,57 @@ create table serie_ibge (
         foreign key (localidade)
         references localidade_ibge(id)
         on delete restrict
+);
+
+create table horario_turma (
+    turma_disciplina varchar(120),
+    turma_id integer,
+	dia_da_semana char(3),
+	horario time,
+    constraint horario_turma_pk
+        primary key (turma_disciplina, turma_id, dia_da_semana, horario),
+    constraint horario_turma_fk
+        foreign key (turma_disciplina, turma_id)
+        references turma(disciplina, id)
+        on delete cascade,
+	constraint dia_da_semana_ck 
+		check (dia_da_semana IN ('DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'))
+);
+
+create table membro_turma (
+    aluno char(11) not null,
+    turma_disciplina varchar(120),
+    turma_id integer,
+	membro_turma_id integer,
+    constraint membro_turma_pk
+        primary key (membro_turma_id),
+    constraint horario_turma_fk
+        foreign key (turma_disciplina, turma_id)
+        references turma(disciplina, id)
+        on delete cascade,
+	constraint membro_turma_aluno_fk
+		foreign key (aluno)
+		references aluno(usuario)
+		on delete cascade
+);
+
+create table teste (
+	titulo varchar(30),
+	template jsonb,
+	data_hora timestamp,
+	constraint teste_pk 
+		primary key (titulo)
+);
+
+create table realiza_teste (
+	teste varchar(30),
+	membro_turma integer,
+	constraint realiza_teste_pk
+		primary key (teste, membro_turma),
+	constraint realiza_teste_teste_fk
+		foreign key (teste) 
+		references teste (titulo),
+	constraint realiza_teste_membro_fk
+		foreign key (membro_turma)
+		references membro_turma(membro_turma_id)
 );

@@ -609,9 +609,16 @@ insert into membro_turma(aluno, turma_disciplina, turma_id, membro_turma_id) val
 insert into membro_turma(aluno, turma_disciplina, turma_id, membro_turma_id) values ('98858922967', 'Configurações de celulares', 1, 6);
 insert into membro_turma(aluno, turma_disciplina, turma_id, membro_turma_id) values ('98744280423', 'Configurações de celulares', 1, 7);
 insert into membro_turma(aluno, turma_disciplina, turma_id, membro_turma_id) values ('98499475264', 'Configurações de celulares', 1, 8);
+insert into membro_turma(aluno, turma_disciplina, turma_id, membro_turma_id) values ('98858922967', 'Emails', 1, 9);
+insert into membro_turma(aluno, turma_disciplina, turma_id, membro_turma_id) values ('98858922967', 'Edição de Imagens', 1, 10);
+insert into membro_turma(aluno, turma_disciplina, turma_id, membro_turma_id) values ('81707379157', 'Edição de Imagens', 1, 11);
 
 
 -- Inserções na tabela "horario_turma"
+insert into horario_turma(turma_disciplina, turma_id, dia_da_semana, horario) values ('Emails', 1, 'SEG', '14:00:00'::time);
+insert into horario_turma(turma_disciplina, turma_id, dia_da_semana, horario) values ('Emails', 2, 'SEG', '16:00:00'::time);
+insert into horario_turma(turma_disciplina, turma_id, dia_da_semana, horario) values ('Edição de Imagens', 1, 'SEG', '16:00:00'::time);
+insert into horario_turma(turma_disciplina, turma_id, dia_da_semana, horario) values ('Edição de Imagens', 1, 'TER', '16:00:00'::time);
 
 
 -- Inserções na tabela "teste"
@@ -623,6 +630,14 @@ insert into teste(titulo, template, data_hora) values ('Teste 2', NULL, '2023-06
 
 
 -- Inserções na tabela "realiza_teste"
+insert into realiza_teste(teste, membro_turma) values ('Prova de conhecimento geral', 8);
+insert into realiza_teste(teste, membro_turma) values ('Prova de conhecimento geral', 7);
+insert into realiza_teste(teste, membro_turma) values ('Prova de conhecimento geral', 6);
+insert into realiza_teste(teste, membro_turma) values ('Prova de conhecimento geral', 5);
+insert into realiza_teste(teste, membro_turma) values ('Prova de conhecimento geral', 4);
+insert into realiza_teste(teste, membro_turma) values ('Teste preparatorio', 3);
+insert into realiza_teste(teste, membro_turma) values ('Teste preparatorio', 2);
+insert into realiza_teste(teste, membro_turma) values ('Teste preparatorio', 1);
 
 
 -- Inserções na tabela "avaliacao_professor"

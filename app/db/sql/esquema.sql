@@ -28,7 +28,6 @@ drop table if exists moderador;
 drop function if exists usuario_tipo;
 drop table if exists usuario;
 drop table if exists horario_turma;
-
 drop table if exists membro_turma;
 drop table if exists realiza_teste;
 drop table if exists teste;
@@ -427,7 +426,7 @@ create table horario_turma (
         foreign key (turma_disciplina, turma_id)
         references turma(disciplina, id)
         on delete cascade,
-	constraint dia_da_semana_ck 
+	constraint dia_da_semana_ck
 		check (dia_da_semana IN ('DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'))
 );
 
@@ -452,7 +451,7 @@ create table teste (
 	titulo varchar(30),
 	template jsonb,
 	data_hora timestamp,
-	constraint teste_pk 
+	constraint teste_pk
 		primary key (titulo)
 );
 
@@ -462,7 +461,7 @@ create table realiza_teste (
 	constraint realiza_teste_pk
 		primary key (teste, membro_turma),
 	constraint realiza_teste_teste_fk
-		foreign key (teste) 
+		foreign key (teste)
 		references teste (titulo),
 	constraint realiza_teste_membro_fk
 		foreign key (membro_turma)
